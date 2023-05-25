@@ -1,6 +1,6 @@
 {
   "name": "@pax-k/rn-async-storage-level",
-  "description": "This is an abstract-level implementation of AsyncStorage for React Native using TypeScript.",
+  "description": "An abstract-level implementation of AsyncStorage for React Native using TypeScript.",
   "version": "1.0.2",
   "source": "src/index.ts",
   "browser": "dist/main.js",
@@ -9,6 +9,7 @@
   "scripts": {
     "watch": "bash watch.sh",
     "build": "bash build.sh",
+    "publish": "bash publish.sh",
     "browserify": "browserify -p esmify dist/main.js -o dist/main.js -s AsyncStorageLevel",
     "minify": "terser --compress --mangle --ecma 2015 -o dist/main.js -- dist/main.js",
     "lint": "eslint src/**/*.ts",
