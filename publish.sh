@@ -4,6 +4,7 @@ npm version patch && \
     mkdir -p to-npm/dist
     cp dist/* to-npm/dist && \
     cp package.json to-npm && \
+    cp README.md to-npm && \
     cd to-npm && npm pack && \
     git add . && \
     git commit -m "release $(npm pkg get version | tr -d '\"')" && \
