@@ -35,6 +35,10 @@
     "rn-async-storage-level",
     "typescript"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pax-k/rn-async-storage-level"
+  },
   "packageManager": "yarn@3.5.0",
   "devDependencies": {
     "@parcel/compressor-brotli": "2.8.3",
