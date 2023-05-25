@@ -17,7 +17,7 @@ yarn expo run:android
 # 💿 Installation
 
 ```
-yarn add rn-async-storage-level
+yarn add @pax-k/rn-async-storage-level
 ```
 
 
