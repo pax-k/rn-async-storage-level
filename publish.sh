@@ -7,6 +7,7 @@ npm version patch && \
     cp README.md to-npm && \
     cd to-npm && npm pack && \
     git add . && \
+    git add ../ && \
     git commit -m "release $(npm pkg get version | tr -d '\"')" && \
     git push && \
     git push origin v$(npm pkg get version | tr -d '"')
