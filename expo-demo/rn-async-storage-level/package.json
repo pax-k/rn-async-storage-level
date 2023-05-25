@@ -1,6 +1,7 @@
 {
-  "name": "rn-async-storage-level",
-  "version": "1.0.0",
+  "name": "@pax-k/rn-async-storage-level",
+  "description": "This is an abstract-level implementation of AsyncStorage for React Native using TypeScript.",
+  "version": "1.0.2",
   "source": "src/index.ts",
   "browser": "dist/main.js",
   "types": "dist/types.d.ts",
@@ -24,9 +25,19 @@
     "npm": "🚨 👉👉 Please use yarn 👈👈 🚨",
     "yarn": "3.5.0"
   },
-  "keywords": [],
+  "keywords": [
+    "abstract-level",
+    "level",
+    "react-native",
+    "expo",
+    "async-storage",
+    "rn-async-storage-level",
+    "typescript"
+  ],
   "packageManager": "yarn@3.5.0",
   "devDependencies": {
+    "@parcel/compressor-brotli": "2.8.3",
+    "@parcel/compressor-gzip": "2.8.3",
     "@parcel/packager-ts": "2.8.3",
     "@parcel/transformer-typescript-types": "2.8.3",
     "@react-native-async-storage/async-storage": "1.18.1",
@@ -54,6 +65,7 @@
     "prettier": "^2.8.7",
     "terser": "5.17.6",
     "text-encoding": "0.7.0",
+    "tinyify": "4.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2"
   }

@@ -1,10 +1,10 @@
-# RNAsyncStorageLevel
+# ⚡️ RNAsyncStorageLevel
 
 This is an [`abstract-level`](https://github.com/Level/abstract-level) implementation of [`AsyncStorage`](https://react-native-async-storage.github.io/async-storage/) for React Native using TypeScript.
 
 It was tested with Expo SDK 48 for iOS & Android.
 
-# Prerequisites
+# 🔥 Prerequisites
 
 `AsyncStorage` has to be installed, and development builds have to be created:
 
@@ -14,16 +14,16 @@ yarn expo run:ios
 yarn expo run:android
 ```
 
-# Installation
+# 💿 Installation
 
 ```
 yarn add rn-async-storage-level
 ```
 
 
-# Usage
+# 🏋️ Usage
 
-## With promises
+## ✅ With promises (prefered way)
 ```
 import { RNAsyncStorageLevel } from 'rn-async-storage-level'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -77,7 +77,7 @@ async function withAsync() {
 	}
 }
 ```
-## With callbacks
+## 🌝 With callbacks (prefer promises)
 ```
 import { RNAsyncStorageLevel } from 'rn-async-storage-level'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -156,11 +156,33 @@ async function withCallbacks() {
 }
 ```
 
-# Limitations
+# 🙋‍♂️ FAQ
+## 👉🏻 Why build this
+There was no modern and actively maintained `abstract-level` compatible storage for React Native.
+## 👉🏻 Why this works
+`abstract-level` uses NodeJS native functions which won't work in a browser (or in the Hermes JS engine for React Native). At build time, `parcel` [pollyfills](https://parceljs.org/features/node-emulation#polyfilling-%26-excluding-builtin-node-modules) some of the native functions, but misses `text-encoding`. This is injected by [`build.sh`](build.sh), then `browserify` bundles everything together into a 100% browser compatible module.
+
+Apart from bundling, it is important to have `AsyncStorage` module installed in the consumer app, for it to referece the correct bindings. This is why it needs to be refereced from the app:
+```
+const db = new RNAsyncStorageLevel(AsyncStorage, 'my-db-1')
+```
+# 🚧 Limitations
 - [Known storage limits](https://react-native-async-storage.github.io/async-storage/docs/limits)
 - a value's type is limited to `string | number | boolean | null | undefined`
+- no support for `snapshots, keyIterator, valueIterator, iteratorNextv, streams, seek, batch`
+- without support for snapshots, isolation of transactions is instead guaranteed by using await/promises (as they are sequential), as opposed to callbacks that use `queueMicrotask`
+# 👷 TODO
+- support for `keyIterator, valueIterator, iteratorNextv, batch` operations
+- support for `Uint8Array` as value type (for storing files as blobs)
+- caching + invalidation
+- add tests
+# 🌈 Shouts 👏🏻
+To [Hyphen](https://hyphen.id/) for sponsoring this effort and to [TBD](https://www.tbd.website/) for powering the next wave of private & decentralised apps.
 
-# TODO
-- support `batch` operations
-- iterator for `next()`, `nextv()`
-- support `Uint8Array` as value type
+# 👋 Contribute
+## Running the project locally
+```
+yarn
+cd expo-demo && yarn && yarn expo start:ios
+cd ../ && yarn watch
+```

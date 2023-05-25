@@ -2170,6 +2170,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@pax-k/rn-async-storage-level@file:./rn-async-storage-level::locator=expo-demo%40workspace%3A.":
+  version: 1.0.2
+  resolution: "@pax-k/rn-async-storage-level@file:./rn-async-storage-level#./rn-async-storage-level::hash=925e46&locator=expo-demo%40workspace%3A."
+  checksum: fd85d2580d79a7b769031cb106e68549b683b7e77b5d8b74020e4a6fda7f164ecb2f17a4fd8d978f9675f117a681899982d1e3448197b8f2303b4ac12069f2bd
+  languageName: node
+  linkType: hard
+
 "@react-native-async-storage/async-storage@npm:1.18.1":
   version: 1.18.1
   resolution: "@react-native-async-storage/async-storage@npm:1.18.1"
@@ -4304,6 +4311,7 @@ __metadata:
   resolution: "expo-demo@workspace:."
   dependencies:
     "@babel/core": ^7.20.0
+    "@pax-k/rn-async-storage-level": "file:./rn-async-storage-level"
     "@react-native-async-storage/async-storage": 1.18.1
     "@types/react": ~18.0.14
     expo: ~48.0.15
@@ -4311,7 +4319,6 @@ __metadata:
     expo-status-bar: ~1.4.4
     react: 18.2.0
     react-native: 0.71.8
-    rn-async-storage-level: "file:./rn-async-storage-level"
     typescript: ^4.9.4
   languageName: unknown
   linkType: soft
@@ -8047,13 +8054,6 @@ __metadata:
   bin:
     rimraf: ./bin.js
   checksum: 3ea587b981a19016297edb96d1ffe48af7e6af69660e3b371dbfc73722a73a0b0e9be5c88089fbeeb866c389c1098e07f64929c7414290504b855f54f901ab10
-  languageName: node
-  linkType: hard
-
-"rn-async-storage-level@file:./rn-async-storage-level::locator=expo-demo%40workspace%3A.":
-  version: 1.0.0
-  resolution: "rn-async-storage-level@file:./rn-async-storage-level#./rn-async-storage-level::hash=9ee8fa&locator=expo-demo%40workspace%3A."
-  checksum: f24904829ed138b29a49e3f6819bab276d0fc3d351c5641c7cea01fab90a44ab42f9a0eb6aa46c3bc74e853b6c1455938026a37bf13fc82867912aa580700107
   languageName: node
   linkType: hard
 

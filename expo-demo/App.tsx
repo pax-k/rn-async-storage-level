@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View } from 'react-native'
-import { RNAsyncStorageLevel } from 'rn-async-storage-level'
+import { RNAsyncStorageLevel } from '@pax-k/rn-async-storage-level'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 // create a new db
