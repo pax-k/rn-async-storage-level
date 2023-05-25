@@ -1,6 +1,6 @@
 import { AsyncStorageStatic } from "@react-native-async-storage/async-storage";
 import { AbstractKeyIteratorOptions, AbstractDatabaseOptions, AbstractIterator, AbstractKeyIterator, AbstractLevel, AbstractValueIterator } from "abstract-level";
-export type LevelErrorCode = 'LEVEL_PUT_ERROR' | 'LEVEL_NOT_FOUND' | 'LEVEL_GET_ERROR' | 'LEVEL_DEL_ERROR';
+export type LevelErrorCode = 'LEVEL_PUT_ERROR' | 'LEVEL_NOT_FOUND' | 'LEVEL_GET_ERROR' | 'LEVEL_DEL_ERROR' | 'LEVEL_INVALID_VALUE';
 export class LevelError extends Error {
     code: LevelErrorCode;
     constructor(message: string, code: LevelErrorCode);
