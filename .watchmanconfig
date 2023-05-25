@@ -1,0 +1,4 @@
+{
+  "ignore_dirs": ["node_modules", ".git"],
+  "trigger_suffixes": ["js", "jsx", "ts", "tsx", "json"]
+}

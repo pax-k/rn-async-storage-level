@@ -1,0 +1,1 @@
+fswatch ./src | (while read; do bash sync.sh; done)

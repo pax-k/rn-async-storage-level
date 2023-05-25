@@ -8,7 +8,7 @@
 !.yarn/versions
 
 # Build files
-dist
+#dist
 
 # Types
 !**/declarations.d.ts
@@ -19,3 +19,7 @@ dist
 
 # DS Store
 .DS_Store
+.parcel-cache
+
+.yarn/cache/
+node_modules
