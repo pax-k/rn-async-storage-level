@@ -184,6 +184,7 @@ To [Hyphen](https://hyphen.id/) for sponsoring this effort and to [TBD](https://
 # 👋 Contribute
 ## Running the project locally
 ```
+git clone https://github.com/pax-k/rn-async-storage-level && cd rn-async-storage-level
 yarn
 cd expo-demo && yarn && yarn expo start:ios
 cd ../ && yarn watch
