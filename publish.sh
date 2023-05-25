@@ -8,5 +8,6 @@ npm version patch && \
     git add . && \
     git commit -m "release $(npm pkg get version | tr -d '\"')" && \
     git push && \
+    git push origin v$(npm pkg get version | tr -d '"')
     gh release create v$(npm pkg get version | tr -d '"') --generate-notes ./*.tgz && \
     npm publish --access public --tag v$(npm pkg get version | | tr -d '"')
