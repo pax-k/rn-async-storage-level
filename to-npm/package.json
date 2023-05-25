@@ -1,7 +1,7 @@
 {
   "name": "@pax-k/rn-async-storage-level",
   "description": "An abstract-level implementation of AsyncStorage for React Native using TypeScript.",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "source": "src/index.ts",
   "browser": "dist/main.js",
   "types": "dist/types.d.ts",
@@ -35,6 +35,10 @@
     "rn-async-storage-level",
     "typescript"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pax-k/rn-async-storage-level"
+  },
   "packageManager": "yarn@3.5.0",
   "devDependencies": {
     "@parcel/compressor-brotli": "2.8.3",
