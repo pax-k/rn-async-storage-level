@@ -10,4 +10,4 @@ npm version patch && \
     git push && \
     git push origin v$(npm pkg get version | tr -d '"')
     gh release create v$(npm pkg get version | tr -d '"') --generate-notes ./*.tgz && \
-    npm publish --access public --tag $(npm pkg get version | tr -d '"')
+    npm publish --access public
