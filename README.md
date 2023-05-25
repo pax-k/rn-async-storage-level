@@ -1,77 +1,166 @@
-# A Typescript, Node.js Boilerplate with Yarn Zero Install
+# RNAsyncStorageLevel
 
-[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/pomsense.svg?style=social&label=Follow%20%40pomsense)](https://twitter.com/pomsense)
+This is an [`abstract-level`](https://github.com/Level/abstract-level) implementation of [`AsyncStorage`](https://react-native-async-storage.github.io/async-storage/) for React Native using TypeScript.
 
-A boilerplate that works out of the box using Yarn PnP (Zero Install). This project has strong commit and lint enforcement. You can configure any of this to cater to your project, though the default setup is recommended to drive both an efficient dev process and enforce code quality.
+It was tested with Expo SDK 48 for iOS & Android.
 
-Features include:
+# Prerequisites
 
-- [Yarn](#yarn) 3.5.0 with zero install
-- TypeScript 5.0
-- Eslint: Strict eslint that is production ready that enforces:
-  - kebab case for files
-  - camel case for variables
-  - strong typing with no-explicit-any
-  - ...and more (See `.eslintrc`; you can disable things you don't need)
-- Prettier
-- [Husky](#husky) for [pre-commit](#commit-rules) linting enforcement
-- [CSpell](#spell-check) for spell check on commits
-
-# Getting-started
-
-Clone the repo by click the [Use this template](https://github.com/pomSense/typescript-node-yarn-pnp-boilerplate/generate) button.
-
-## Clone and run
+`AsyncStorage` has to be installed, and development builds have to be created:
 
 ```
-git clone https://github.com/pomSense/typescript-node-yarn-pnp-boilerplate
-cd typescript-node-yarn-pnp-boilerplate
-yarn
-yarn husky install
-yarn launch
+yarn add @react-native-async-storage/async-storage
+yarn expo run:ios
+yarn expo run:android
 ```
 
-Make sure to setup your [VScode typescript version](#vs-code---typescript-version).
-
-## Husky
-
-Husky helps run spelling and lint checks upon committing. This makes a much more efficient dev process and catches this prior to linting on .github actions (future feature).
-
-## Yarn
-
-When running a yarn command, if you get issues, fail-safe is always to just use `yarn run {your command}`
-
-## Commit rules
-
-Currently, strong commit rules are enforced that are used in top engineering projects. They're located in `.commitlintrc`.
-
-Commits must start with:
+# Installation
 
 ```
- "merge",
-"build",
-"chore",
-"ci",
-"docs",
-"feat",
-"fix",
-"perf",
-"refactor",
-"revert",
-"style",
-"test"
+yarn add rn-async-storage-level
 ```
 
-## VS Code - TypeScript Version
 
-If you are getting TypeScript errors in VS code but not in the terminal, that is because when using VS Code, you have to set the typescript version to use the workspace's version.
+# Usage
 
-- To do this, open the `index.ts` do `cmd`+`shift`+`p`.
-- Select `TypeScript: Select TypeScript Version...` (NOTE: This will only show if you do the previous step with a TypeScript file open)
-- Choose `Use Workspace Version`
+## With promises
+```
+import { RNAsyncStorageLevel } from 'rn-async-storage-level'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-## Spell check
+async function withAsync() {
+	try {
+		// create a new db
+		const db = new RNAsyncStorageLevel(AsyncStorage, 'my-db-1')
 
-This project uses spell check. Configuration lives in `cspell.yml`.
+		// listen for 'put' events
+		db.on('put', (key, value) => {
+			console.log('event: put', key, value)
+		})
 
-You can add words that are specific to your project in `cspell-project-words.txt`.
+		// listen for 'del' events
+		db.on('del', (key) => {
+			console.log('event: del', key)
+		})
+
+		// listen for 'clear' events
+		db.on('clear', () => {
+			console.log('event: clear')
+		})
+
+		// write some data
+		await db.put('key1', 'value1')
+		await db.put('key2', 'value2')
+
+		// get the value of one key
+		console.log(await db.get('key1'))
+
+		// get the values of multiple keys
+		console.log(await db.getMany(['key1', 'key2']))
+
+		// get all keys
+		console.log(await db.keys().all())
+
+		// get all values
+		console.log(await db.values().all())
+
+		// get all entries
+		console.log(await db.iterator().all())
+
+		// delete a key
+		await db.del('key1')
+
+		// clear db
+		await db.clear()
+	} catch (error) {
+		console.error(error)
+	}
+}
+```
+## With callbacks
+```
+import { RNAsyncStorageLevel } from 'rn-async-storage-level'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
+async function withCallbacks() {
+	// create a new db
+	const db = new RNAsyncStorageLevel(AsyncStorage, 'my-db-1')
+
+	// listen for 'put' events
+	db.on('put', (key, value) => {
+		console.log('event: put', key, value)
+	})
+
+	// listen for 'del' events
+	db.on('del', (key) => {
+		console.log('event: del', key)
+	})
+
+	// listen for 'clear' events
+	db.on('clear', () => {
+		console.log('event: clear')
+	})
+
+	// write some data
+	db.put('key1', 'value1', (err)  => {
+		if (err) console.error(err)
+		console.log('put callback')
+	})
+
+	db.put('key2', 'value2', (err)  => {
+		if (err) console.error(err)
+		console.log('put callback')
+	})
+
+	// get the value of one key
+	db.get('key1', (err, result) => {
+		if (err) console.error(err)
+		console.log('get callback', result)
+	})
+
+	// get the values of multiple keys
+	db.getMany(['key1', 'key2'], (err, result) => {
+		if (err) console.error(err)
+		console.log('getMany callback', result)
+	})
+
+	// get all keys
+	db.keys().all((err, result) => {
+		if (err) console.error(err)
+		console.log('keys callback', result)
+	})
+
+	// get all values
+	db.values().all((err, result) => {
+		if (err) console.error(err)
+		console.log('values callback', result)
+	})
+
+	// get all entries
+	db.iterator().all((err, result) => {
+		if (err) console.error(err)
+		console.log('iterator callback', result)
+	})
+
+	// delete a key
+	db.del('key1', (err) => {
+		if (err) console.error(err)
+		console.log('del callback')
+	})
+
+	// clear db
+	db.clear((err) => {
+		if (err) console.error(err)
+		console.log('clear callback')
+	})
+}
+```
+
+# Limitations
+- [Known storage limits](https://react-native-async-storage.github.io/async-storage/docs/limits)
+- a value's type is limited to `string | number | boolean | null | undefined`
+
+# TODO
+- support `batch` operations
+- iterator for `next()`, `nextv()`
+- support `Uint8Array` as value type

@@ -18,6 +18,7 @@
       }
     }
   ],
+  "ignorePatterns": ["expo-demo"],
   "plugins": ["@typescript-eslint/eslint-plugin", "simple-import-sort", "unicorn", "unused-imports"],
   "extends": [
     "airbnb-typescript/base",

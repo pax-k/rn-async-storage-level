@@ -13,7 +13,7 @@ export class RNAsyncStorageLevel extends AbstractLevel<string, string, ValueType
     protected _open(options: any, callback?: (err?: Error | null) => void): void;
     protected _close(callback?: (err?: Error | null) => void): void;
     protected _get(key: string, options: any, callback?: (err: Error | null, value?: ValueType) => void): void | Promise<ValueType>;
-    getAllKeys(callback?: (err: Error | null, keys?: string[]) => void): void | Promise<string[]>;
+    _getAllKeys(callback?: (err: Error | null, keys?: string[]) => void): void | Promise<string[]>;
     protected _getMany(keys: string[], options: any, callback: (err: Error | null, value?: ValueType[]) => void): void | Promise<ValueType[]>;
     protected _put(key: string, value: string, options: any, callback: (err?: Error | null) => void): void | Promise<void>;
     protected _del(key: string, options: any, callback: (err?: Error | null) => void): void | Promise<void>;
@@ -24,22 +24,16 @@ export class RNAsyncStorageLevel extends AbstractLevel<string, string, ValueType
 }
 export class AsyncStorageIterator extends AbstractIterator<RNAsyncStorageLevel, string, ValueType> {
     constructor(database: RNAsyncStorageLevel, options: any);
-    _next(callback: (err?: Error | null, key?: string, value?: ValueType) => void): Promise<void>;
-    _nextv(size: number, options: any, callback: (err: Error | null, entries?: [string, ValueType][]) => void): Promise<void>;
     _all(options: any, callback: (err: Error | null, entries?: [string, ValueType][]) => void): Promise<void>;
     _close(callback: () => void): void;
 }
 export class AsyncStorageKeyIterator extends AbstractKeyIterator<RNAsyncStorageLevel, string> {
     constructor(db: RNAsyncStorageLevel, options: AbstractKeyIteratorOptions<string>);
-    _next(callback: (err?: Error | null, key?: string) => void): Promise<void>;
-    _nextv(size: number, options: any, callback: (err: Error | null, keys?: string[]) => void): Promise<void>;
     _all(options: any, callback: (err: Error | null, keys?: string[]) => void): Promise<void>;
     _close(callback: () => void): void;
 }
 export class AsyncStorageValueIterator extends AbstractValueIterator<RNAsyncStorageLevel, string, ValueType> {
     constructor(db: RNAsyncStorageLevel, options: any);
-    _next(callback: (err?: Error | null, value?: ValueType) => void): Promise<void>;
-    _nextv(size: number, options: any, callback: (err: Error | null, values?: ValueType[]) => void): Promise<void>;
     _all(options: any, callback: (err: Error | null, values?: ValueType[]) => void): Promise<void>;
     _close(callback: () => void): void;
 }

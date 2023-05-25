@@ -30,12 +30,12 @@ export class RNAsyncStorageLevel extends AbstractLevel<string, string, ValueType
 
   constructor(storage: AsyncStorageStatic, location: string, options?: AbstractDatabaseOptions<string, string>) {
     const manifest: Partial<AbstractLevelType<string>['supports']> = {
-      getMany: false,
+      getMany: true,
       snapshots: false,
       permanence: true,
-      keyIterator: true,
-      valueIterator: true,
-      iteratorNextv: true,
+      keyIterator: false,
+      valueIterator: false,
+      iteratorNextv: false,
       iteratorAll: true,
       streams: false,
       seek: false,
@@ -110,7 +110,7 @@ export class RNAsyncStorageLevel extends AbstractLevel<string, string, ValueType
     }
   }
 
-  public getAllKeys(callback?: (err: Error | null, keys?: string[]) => void): void | Promise<string[]> {
+  public _getAllKeys(callback?: (err: Error | null, keys?: string[]) => void): void | Promise<string[]> {
     if (callback) {
       this.storage
         .getAllKeys()
@@ -178,7 +178,6 @@ export class RNAsyncStorageLevel extends AbstractLevel<string, string, ValueType
     options: any,
     callback: (err?: Error | null) => void
   ): void | Promise<void> {
-    console.log('am chemat _put')
     if (callback) {
       this.storage
         .setItem(`${this.location}/${key}`, value)
@@ -282,41 +281,42 @@ export class AsyncStorageIterator extends AbstractIterator<RNAsyncStorageLevel, 
     this.currentIndex = 0
   }
 
-  async _next(callback: (err?: Error | null, key?: string, value?: ValueType) => void): Promise<void> {
-    if (!this.keys.length) {
-      this.keys = (await this.db.getAllKeys()) as string[]
-    }
-    if (this.currentIndex >= this.keys.length) {
-      callback()
-      return
-    }
+  // TODO: fix
+  // async _next(callback: (err?: Error | null, key?: string, value?: ValueType) => void): Promise<void> {
+  //   if (!this.keys.length) {
+  //     this.keys = (await this.db._getAllKeys()) as string[]
+  //   }
+  //   if (this.currentIndex >= this.keys.length) {
+  //     callback()
+  //     return
+  //   }
 
-    const key = this.keys[this.currentIndex++]
-    const value = (await this.db.get(key)) as ValueType
-    callback(null, key, value)
-  }
+  //   const key = this.keys[this.currentIndex++]
+  //   const value = (await this.db.get(key)) as ValueType
+  //   callback(null, key, value)
+  // }
 
-  async _nextv(
-    size: number,
-    options: any,
-    callback: (err: Error | null, entries?: [string, ValueType][]) => void
-  ): Promise<void> {
-    if (!this.keys.length) {
-      this.keys = (await this.db.getAllKeys()) as string[]
-    }
-    const entries: [string, ValueType][] = []
-    const endIndex = Math.min(this.currentIndex + size, this.keys.length)
-    for (; this.currentIndex < endIndex; this.currentIndex++) {
-      const key = this.keys[this.currentIndex]
-      const value = (await this.db.get(key)) as ValueType
-      entries.push([key, value])
-    }
-    callback(null, entries)
-  }
+  // async _nextv(
+  //   size = 0,
+  //   options?: any,
+  //   callback?: (err: Error | null, entries?: [string, ValueType][]) => void
+  // ): Promise<void> {
+  //   if (!this.keys.length) {
+  //     this.keys = (await this.db._getAllKeys()) as string[]
+  //   }
+  //   const entries: [string, ValueType][] = []
+  //   const endIndex = Math.min(this.currentIndex + size, this.keys.length)
+  //   for (; this.currentIndex < endIndex; this.currentIndex++) {
+  //     const key = this.keys[this.currentIndex]
+  //     const value = (await this.db.get(key)) as ValueType
+  //     entries.push([key, value])
+  //   }
+  //   callback(null, entries)
+  // }
 
   async _all(options: any, callback: (err: Error | null, entries?: [string, ValueType][]) => void): Promise<void> {
     if (!this.keys.length) {
-      this.keys = (await this.db.getAllKeys()) as string[]
+      this.keys = (await this.db._getAllKeys()) as string[]
     }
     const entries: [string, ValueType][] = []
     for (; this.currentIndex < this.keys.length; this.currentIndex++) {
@@ -324,13 +324,13 @@ export class AsyncStorageIterator extends AbstractIterator<RNAsyncStorageLevel, 
       const value = (await this.db.get(key)) as ValueType
       entries.push([key, value])
     }
-    callback(null, entries)
+    queueMicrotask(() => callback(null, entries))
   }
 
   _close(callback: () => void) {
     this.keys = []
     this.currentIndex = 0
-    callback()
+    queueMicrotask(() => callback())
   }
 }
 
@@ -340,48 +340,47 @@ export class AsyncStorageKeyIterator extends AbstractKeyIterator<RNAsyncStorageL
   private currentIndex: number
 
   constructor(db: RNAsyncStorageLevel, options: AbstractKeyIteratorOptions<string>) {
-    console.log('constructor AsyncStorageKeyIterator')
     super(db, options)
     this.keys = []
     this.currentIndex = 0
   }
 
-  async _next(callback: (err?: Error | null, key?: string) => void): Promise<void> {
-    console.log('_next')
-    if (!this.keys.length) {
-      this.keys = (await this.db.getAllKeys()) as string[]
-    }
-    // if (this.currentIndex >= this.keys.length) {
-    //   callback()
-    //   return
-    // }
+  // TODO: fix
+  // async _next(callback: (err?: Error | null, key?: string) => void): Promise<void> {
+  //   if (!this.keys.length) {
+  //     this.keys = (await this.db._getAllKeys()) as string[]
+  //   }
+  //   if (this.currentIndex >= this.keys.length) {
+  //     queueMicrotask(() => callback())
+  //     return
+  //   }
 
-    const key = this.keys[this.currentIndex++]
-    callback(null, key)
-  }
+  //   const key = this.keys[this.currentIndex++]
+  //   queueMicrotask(() => callback(null, key))
+  // }
 
-  async _nextv(size: number, options: any, callback: (err: Error | null, keys?: string[]) => void): Promise<void> {
-    if (!this.keys.length) {
-      this.keys = (await this.db.getAllKeys()) as string[]
-    }
-    const keys = this.keys.slice(this.currentIndex, this.currentIndex + size)
-    this.currentIndex += keys.length
-    callback(null, keys)
-  }
+  // async _nextv(size: number, options: any, callback: (err: Error | null, keys?: string[]) => void): Promise<void> {
+  //   if (!this.keys.length) {
+  //     this.keys = (await this.db._getAllKeys()) as string[]
+  //   }
+  //   const keys = this.keys.slice(this.currentIndex, this.currentIndex + size)
+  //   this.currentIndex += keys.length
+  //   queueMicrotask(() => callback(null, keys))
+  // }
 
   async _all(options: any, callback: (err: Error | null, keys?: string[]) => void): Promise<void> {
     if (!this.keys.length) {
-      this.keys = (await this.db.getAllKeys()) as string[]
+      this.keys = (await this.db._getAllKeys()) as string[]
     }
     const keys = this.keys.slice(this.currentIndex)
     this.currentIndex = this.keys.length
-    callback(null, keys)
+    queueMicrotask(() => callback(null, keys))
   }
 
   _close(callback: () => void) {
     this.keys = []
     this.currentIndex = 0
-    callback()
+    queueMicrotask(() => callback())
   }
 }
 
@@ -395,50 +394,44 @@ export class AsyncStorageValueIterator extends AbstractValueIterator<RNAsyncStor
     this.keys = []
     this.currentIndex = 0
   }
+  // TODO: fix
+  // async _next(callback: (err?: Error | null, value?: ValueType) => void): Promise<void> {
+  //   if (!this.keys.length) {
+  //     this.keys = (await this.db._getAllKeys()) as string[]
+  //   }
+  //   if (this.currentIndex >= this.keys.length) {
+  //     queueMicrotask(() => callback())
+  //     return
+  //   }
+  //   const key = this.keys[this.currentIndex++]
+  //   const value = (await this.db.get(key)) as ValueType
+  //   queueMicrotask(() => callback(null, value))
+  // }
 
-  async _next(callback: (err?: Error | null, value?: ValueType) => void): Promise<void> {
-    console.log('_next')
-    if (!this.keys.length) {
-      this.keys = (await this.db.getAllKeys()) as string[]
-    }
-    if (this.currentIndex >= this.keys.length) {
-      callback()
-      return
-    }
-
-    const key = this.keys[this.currentIndex++]
-    const value = (await this.db.get(key)) as ValueType
-    callback(null, value)
-  }
-
-  async _nextv(size: number, options: any, callback: (err: Error | null, values?: ValueType[]) => void): Promise<void> {
-    console.log('_nextv')
-    if (!this.keys.length) {
-      this.keys = (await this.db.getAllKeys()) as string[]
-    }
-    const endIndex = Math.min(this.currentIndex + size, this.keys.length)
-    const fetchPromises = this.keys.slice(this.currentIndex, endIndex).map((key) => this.db.get(key))
-    const values = await Promise.all(fetchPromises)
-    this.currentIndex = endIndex
-    callback(null, values)
-  }
+  // async _nextv(size: number, options: any, callback: (err: Error | null, values?: ValueType[]) => void): Promise<void> {
+  //   if (!this.keys.length) {
+  //     this.keys = (await this.db._getAllKeys()) as string[]
+  //   }
+  //   const endIndex = Math.min(this.currentIndex + size, this.keys.length)
+  //   const fetchPromises = this.keys.slice(this.currentIndex, endIndex).map((key) => this.db.get(key))
+  //   const values = await Promise.all(fetchPromises)
+  //   this.currentIndex = endIndex
+  //   queueMicrotask(() => callback(null, values))
+  // }
 
   async _all(options: any, callback: (err: Error | null, values?: ValueType[]) => void): Promise<void> {
-    console.log('_all', this.keys)
     if (!this.keys.length) {
-      this.keys = (await this.db.getAllKeys()) as string[]
+      this.keys = (await this.db._getAllKeys()) as string[]
     }
-    const endIndex = Math.min(this.currentIndex, this.keys.length)
-    console.log('currentIndex', this.currentIndex, 'keys', length, 'endIndex', endIndex)
-    const fetchPromises = this.keys.slice(this.currentIndex, endIndex).map((key) => this.db.get(key))
+    const fetchPromises = this.keys.slice(this.currentIndex, this.keys.length).map((key) => this.db.get(key))
     const values = await Promise.all(fetchPromises)
-    this.currentIndex = endIndex
-    callback(null, values)
+    this.currentIndex = this.keys.length
+    queueMicrotask(() => callback(null, values))
   }
 
   _close(callback: () => void) {
     this.keys = []
     this.currentIndex = 0
-    callback()
+    queueMicrotask(() => callback())
   }
 }

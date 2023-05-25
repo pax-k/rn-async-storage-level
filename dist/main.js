@@ -2282,12 +2282,12 @@ exports.LevelError = $e17ec973c397cc75$export$668ba004617a6cc2;
 class $e17ec973c397cc75$export$7ae392b4a5904236 extends (0, $3cbe9a3e73dba1af$export$3e2c6c8f6c478102) {
   constructor(storage, location, options) {
     const manifest = {
-      getMany: false,
+      getMany: true,
       snapshots: false,
       permanence: true,
-      keyIterator: true,
-      valueIterator: true,
-      iteratorNextv: true,
+      keyIterator: false,
+      valueIterator: false,
+      iteratorNextv: false,
       iteratorAll: true,
       streams: false,
       seek: false,
@@ -2341,7 +2341,7 @@ class $e17ec973c397cc75$export$7ae392b4a5904236 extends (0, $3cbe9a3e73dba1af$ex
       });
     });
   }
-  getAllKeys(callback) {
+  _getAllKeys(callback) {
     if (callback) this.storage.getAllKeys().then(keys => queueMicrotask(() => {
       callback(null, keys.filter(key => key.startsWith(this.location)).map(key => key.replace(`${this.location}/`, "")));
     })).catch(err => queueMicrotask(() => {
@@ -2360,7 +2360,6 @@ class $e17ec973c397cc75$export$7ae392b4a5904236 extends (0, $3cbe9a3e73dba1af$ex
     });
   }
   _put(key, value, options, callback) {
-    console.log("am chemat _put");
     if (callback) this.storage.setItem(`${this.location}/${key}`, value).then(() => queueMicrotask(() => {
       callback();
     })).catch(err => queueMicrotask(() => {
@@ -2410,77 +2409,89 @@ class $e17ec973c397cc75$export$fcd23f5d0490a8e2 extends (0, $3cbe9a3e73dba1af$ex
     this.keys = [];
     this.currentIndex = 0;
   }
-  async _next(callback) {
-    if (!this.keys.length) this.keys = await this.db.getAllKeys();
-    if (this.currentIndex >= this.keys.length) {
-      callback();
-      return;
-    }
-    const key = this.keys[this.currentIndex++];
-    const value = await this.db.get(key);
-    callback(null, key, value);
-  }
-  async _nextv(size, options, callback) {
-    if (!this.keys.length) this.keys = await this.db.getAllKeys();
-    const entries = [];
-    const endIndex = Math.min(this.currentIndex + size, this.keys.length);
-    for (; this.currentIndex < endIndex; this.currentIndex++) {
-      const key = this.keys[this.currentIndex];
-      const value = await this.db.get(key);
-      entries.push([key, value]);
-    }
-    callback(null, entries);
-  }
+  // TODO: fix
+  // async _next(callback: (err?: Error | null, key?: string, value?: ValueType) => void): Promise<void> {
+  //   if (!this.keys.length) {
+  //     this.keys = (await this.db._getAllKeys()) as string[]
+  //   }
+  //   if (this.currentIndex >= this.keys.length) {
+  //     callback()
+  //     return
+  //   }
+  //   const key = this.keys[this.currentIndex++]
+  //   const value = (await this.db.get(key)) as ValueType
+  //   callback(null, key, value)
+  // }
+  // async _nextv(
+  //   size = 0,
+  //   options?: any,
+  //   callback?: (err: Error | null, entries?: [string, ValueType][]) => void
+  // ): Promise<void> {
+  //   if (!this.keys.length) {
+  //     this.keys = (await this.db._getAllKeys()) as string[]
+  //   }
+  //   const entries: [string, ValueType][] = []
+  //   const endIndex = Math.min(this.currentIndex + size, this.keys.length)
+  //   for (; this.currentIndex < endIndex; this.currentIndex++) {
+  //     const key = this.keys[this.currentIndex]
+  //     const value = (await this.db.get(key)) as ValueType
+  //     entries.push([key, value])
+  //   }
+  //   callback(null, entries)
+  // }
   async _all(options, callback) {
-    if (!this.keys.length) this.keys = await this.db.getAllKeys();
+    if (!this.keys.length) this.keys = await this.db._getAllKeys();
     const entries = [];
     for (; this.currentIndex < this.keys.length; this.currentIndex++) {
       const key = this.keys[this.currentIndex];
       const value = await this.db.get(key);
       entries.push([key, value]);
     }
-    callback(null, entries);
+    queueMicrotask(() => callback(null, entries));
   }
   _close(callback) {
     this.keys = [];
     this.currentIndex = 0;
-    callback();
+    queueMicrotask(() => callback());
   }
 }
 exports.AsyncStorageIterator = $e17ec973c397cc75$export$fcd23f5d0490a8e2;
 class $e17ec973c397cc75$export$2a8e694c881965f8 extends (0, $3cbe9a3e73dba1af$export$f2a6a3524a0d1895) {
   constructor(db, options) {
-    console.log("constructor AsyncStorageKeyIterator");
     super(db, options);
     this.keys = [];
     this.currentIndex = 0;
   }
-  async _next(callback) {
-    console.log("_next");
-    if (!this.keys.length) this.keys = await this.db.getAllKeys();
-    // if (this.currentIndex >= this.keys.length) {
-    //   callback()
-    //   return
-    // }
-    const key = this.keys[this.currentIndex++];
-    callback(null, key);
-  }
-  async _nextv(size, options, callback) {
-    if (!this.keys.length) this.keys = await this.db.getAllKeys();
-    const keys = this.keys.slice(this.currentIndex, this.currentIndex + size);
-    this.currentIndex += keys.length;
-    callback(null, keys);
-  }
+  // TODO: fix
+  // async _next(callback: (err?: Error | null, key?: string) => void): Promise<void> {
+  //   if (!this.keys.length) {
+  //     this.keys = (await this.db._getAllKeys()) as string[]
+  //   }
+  //   if (this.currentIndex >= this.keys.length) {
+  //     queueMicrotask(() => callback())
+  //     return
+  //   }
+  //   const key = this.keys[this.currentIndex++]
+  //   queueMicrotask(() => callback(null, key))
+  // }
+  // async _nextv(size: number, options: any, callback: (err: Error | null, keys?: string[]) => void): Promise<void> {
+  //   if (!this.keys.length) {
+  //     this.keys = (await this.db._getAllKeys()) as string[]
+  //   }
+  //   const keys = this.keys.slice(this.currentIndex, this.currentIndex + size)
+  //   this.currentIndex += keys.length
+  //   queueMicrotask(() => callback(null, keys))
+  // }
   async _all(options, callback) {
-    if (!this.keys.length) this.keys = await this.db.getAllKeys();
+    if (!this.keys.length) this.keys = await this.db._getAllKeys();
     const keys = this.keys.slice(this.currentIndex);
     this.currentIndex = this.keys.length;
-    callback(null, keys);
+    queueMicrotask(() => callback(null, keys));
   }
   _close(callback) {
     this.keys = [];
     this.currentIndex = 0;
-    callback();
+    queueMicrotask(() => callback());
   }
 }
 exports.AsyncStorageKeyIterator = $e17ec973c397cc75$export$2a8e694c881965f8;
@@ -2490,40 +2501,40 @@ class $e17ec973c397cc75$export$91702bdced4b073d extends (0, $3cbe9a3e73dba1af$ex
     this.keys = [];
     this.currentIndex = 0;
   }
-  async _next(callback) {
-    console.log("_next");
-    if (!this.keys.length) this.keys = await this.db.getAllKeys();
-    if (this.currentIndex >= this.keys.length) {
-      callback();
-      return;
-    }
-    const key = this.keys[this.currentIndex++];
-    const value = await this.db.get(key);
-    callback(null, value);
-  }
-  async _nextv(size, options, callback) {
-    console.log("_nextv");
-    if (!this.keys.length) this.keys = await this.db.getAllKeys();
-    const endIndex = Math.min(this.currentIndex + size, this.keys.length);
-    const fetchPromises = this.keys.slice(this.currentIndex, endIndex).map(key => this.db.get(key));
-    const values = await Promise.all(fetchPromises);
-    this.currentIndex = endIndex;
-    callback(null, values);
-  }
+  // TODO: fix
+  // async _next(callback: (err?: Error | null, value?: ValueType) => void): Promise<void> {
+  //   if (!this.keys.length) {
+  //     this.keys = (await this.db._getAllKeys()) as string[]
+  //   }
+  //   if (this.currentIndex >= this.keys.length) {
+  //     queueMicrotask(() => callback())
+  //     return
+  //   }
+  //   const key = this.keys[this.currentIndex++]
+  //   const value = (await this.db.get(key)) as ValueType
+  //   queueMicrotask(() => callback(null, value))
+  // }
+  // async _nextv(size: number, options: any, callback: (err: Error | null, values?: ValueType[]) => void): Promise<void> {
+  //   if (!this.keys.length) {
+  //     this.keys = (await this.db._getAllKeys()) as string[]
+  //   }
+  //   const endIndex = Math.min(this.currentIndex + size, this.keys.length)
+  //   const fetchPromises = this.keys.slice(this.currentIndex, endIndex).map((key) => this.db.get(key))
+  //   const values = await Promise.all(fetchPromises)
+  //   this.currentIndex = endIndex
+  //   queueMicrotask(() => callback(null, values))
+  // }
   async _all(options, callback) {
-    console.log("_all", this.keys);
-    if (!this.keys.length) this.keys = await this.db.getAllKeys();
-    const endIndex = Math.min(this.currentIndex, this.keys.length);
-    console.log("currentIndex", this.currentIndex, "keys", length, "endIndex", endIndex);
-    const fetchPromises = this.keys.slice(this.currentIndex, endIndex).map(key => this.db.get(key));
+    if (!this.keys.length) this.keys = await this.db._getAllKeys();
+    const fetchPromises = this.keys.slice(this.currentIndex, this.keys.length).map(key => this.db.get(key));
     const values = await Promise.all(fetchPromises);
-    this.currentIndex = endIndex;
-    callback(null, values);
+    this.currentIndex = this.keys.length;
+    queueMicrotask(() => callback(null, values));
   }
   _close(callback) {
     this.keys = [];
     this.currentIndex = 0;
-    callback();
+    queueMicrotask(() => callback());
   }
 }
 exports.AsyncStorageValueIterator = $e17ec973c397cc75$export$91702bdced4b073d;

@@ -8052,8 +8052,8 @@ __metadata:
 
 "rn-async-storage-level@file:./rn-async-storage-level::locator=expo-demo%40workspace%3A.":
   version: 1.0.0
-  resolution: "rn-async-storage-level@file:./rn-async-storage-level#./rn-async-storage-level::hash=7d07f8&locator=expo-demo%40workspace%3A."
-  checksum: a14ea51a6ffe69250b45df823ffe275301c32d65b2f0b2e49285f71290af22875cf75f8e68b1bd85624f537b378ec19a5cf5cf2b2f3f701f5551cd45375fe33a
+  resolution: "rn-async-storage-level@file:./rn-async-storage-level#./rn-async-storage-level::hash=9ee8fa&locator=expo-demo%40workspace%3A."
+  checksum: f24904829ed138b29a49e3f6819bab276d0fc3d351c5641c7cea01fab90a44ab42f9a0eb6aa46c3bc74e853b6c1455938026a37bf13fc82867912aa580700107
   languageName: node
   linkType: hard
 
