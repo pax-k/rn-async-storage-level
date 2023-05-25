@@ -1,0 +1,73 @@
+{
+  "name": "@pax-k/rn-async-storage-level",
+  "description": "An abstract-level implementation of AsyncStorage for React Native using TypeScript.",
+  "version": "1.0.4",
+  "source": "src/index.ts",
+  "browser": "dist/main.js",
+  "types": "dist/types.d.ts",
+  "type": "module",
+  "scripts": {
+    "watch": "bash watch.sh",
+    "build": "bash build.sh",
+    "publish": "bash publish.sh",
+    "browserify": "browserify -p esmify dist/main.js -o dist/main.js -s AsyncStorageLevel",
+    "minify": "terser --compress --mangle --ecma 2015 -o dist/main.js -- dist/main.js",
+    "lint": "eslint src/**/*.ts",
+    "format": "eslint src/**/*.ts --fix",
+    "launch": "yarn ts-node src/index.ts"
+  },
+  "targets": {
+    "browser": {
+      "includeNodeModules": true,
+      "isLibrary": true
+    }
+  },
+  "engines": {
+    "npm": "🚨 👉👉 Please use yarn 👈👈 🚨",
+    "yarn": "3.5.0"
+  },
+  "keywords": [
+    "abstract-level",
+    "level",
+    "react-native",
+    "expo",
+    "async-storage",
+    "rn-async-storage-level",
+    "typescript"
+  ],
+  "packageManager": "yarn@3.5.0",
+  "devDependencies": {
+    "@parcel/compressor-brotli": "2.8.3",
+    "@parcel/compressor-gzip": "2.8.3",
+    "@parcel/packager-ts": "2.8.3",
+    "@parcel/transformer-typescript-types": "2.8.3",
+    "@react-native-async-storage/async-storage": "1.18.1",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^18.15.7",
+    "@types/prettier": "^2.7.2",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
+    "abstract-level": "^1.0.3",
+    "browserify": "17.0.0",
+    "buffer": "^5.5.0",
+    "eslint": "^8.36.0",
+    "eslint-config-airbnb-typescript": "17.0.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jest": "26.1.4",
+    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-simple-import-sort": "7.0.0",
+    "eslint-plugin-testing-library": "5.3.1",
+    "eslint-plugin-unicorn": "42.0.0",
+    "eslint-plugin-unused-imports": "2.0.0",
+    "esmify": "2.1.1",
+    "jest": "28.0.3",
+    "parcel": "^2.8.3",
+    "prettier": "^2.8.7",
+    "terser": "5.17.6",
+    "text-encoding": "0.7.0",
+    "tinyify": "4.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.2"
+  }
+}
