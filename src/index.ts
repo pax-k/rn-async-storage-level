@@ -16,6 +16,7 @@ export type LevelErrorCode =
   | 'LEVEL_GET_ERROR'
   | 'LEVEL_DEL_ERROR'
   | 'LEVEL_INVALID_VALUE'
+  | 'LEVEL_IO_ERROR'
 
 export class LevelError extends Error {
   public code: LevelErrorCode
@@ -27,14 +28,14 @@ export class LevelError extends Error {
   }
 }
 
-export type ValueType = string | number | boolean | null | undefined
+export type ValueType = string
 
 export class RNAsyncStorageLevel extends AbstractLevel<string, string, ValueType> {
   protected storage: AsyncStorageStatic
 
   protected location: string
 
-  constructor(storage: AsyncStorageStatic, location: string, options?: AbstractDatabaseOptions<string, string>) {
+  constructor(location: string, options?: AbstractDatabaseOptions<string, string>) {
     const manifest: Partial<AbstractLevelType<string>['supports']> = {
       getMany: true,
       snapshots: false,
@@ -69,18 +70,26 @@ export class RNAsyncStorageLevel extends AbstractLevel<string, string, ValueType
 
     super(manifest, mergedOptions)
     this.location = location
+  }
+
+  public setStorage(storage: AsyncStorageStatic): void {
     this.storage = storage
   }
 
   protected _open(options: any, callback: (err?: Error | null) => void = () => {}): void {
     // AsyncStorage does not need an explicit open call.
+    if (this.storage === undefined) {
+      queueMicrotask(() => {
+        callback(new LevelError('Storage not set', 'LEVEL_IO_ERROR'))
+      })
+    }
     queueMicrotask(() => {
       callback()
     })
   }
 
   protected _close(callback: (err?: Error | null) => void = () => {}): void {
-    // AsyncStorage does not need an explicit close call.
+    // AsyncStorage does not need an explicit close call..
     queueMicrotask(() => {
       callback()
     })
@@ -441,3 +450,5 @@ export class AsyncStorageValueIterator extends AbstractValueIterator<RNAsyncStor
     queueMicrotask(() => callback())
   }
 }
+
+export * from './level-factory'

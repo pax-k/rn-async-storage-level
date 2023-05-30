@@ -1,15 +1,20 @@
+import { AbstractDatabaseOptions, AbstractLevel, AbstractKeyIteratorOptions, AbstractIterator, AbstractKeyIterator, AbstractValueIterator } from "abstract-level";
 import { AsyncStorageStatic } from "@react-native-async-storage/async-storage";
-import { AbstractKeyIteratorOptions, AbstractDatabaseOptions, AbstractIterator, AbstractKeyIterator, AbstractLevel, AbstractValueIterator } from "abstract-level";
-export type LevelErrorCode = 'LEVEL_PUT_ERROR' | 'LEVEL_NOT_FOUND' | 'LEVEL_GET_ERROR' | 'LEVEL_DEL_ERROR' | 'LEVEL_INVALID_VALUE';
+export type LevelType = AbstractLevel<string>;
+export class LevelFactory {
+    static createAbstractLevel<T extends AbstractLevel<string>>(levelClass: new (location: string, options?: AbstractDatabaseOptions<string, string>) => T, location: string, options?: AbstractDatabaseOptions<string, string>): T;
+}
+export type LevelErrorCode = 'LEVEL_PUT_ERROR' | 'LEVEL_NOT_FOUND' | 'LEVEL_GET_ERROR' | 'LEVEL_DEL_ERROR' | 'LEVEL_INVALID_VALUE' | 'LEVEL_IO_ERROR';
 export class LevelError extends Error {
     code: LevelErrorCode;
     constructor(message: string, code: LevelErrorCode);
 }
-export type ValueType = string | number | boolean | null | undefined;
+export type ValueType = string;
 export class RNAsyncStorageLevel extends AbstractLevel<string, string, ValueType> {
     protected storage: AsyncStorageStatic;
     protected location: string;
-    constructor(storage: AsyncStorageStatic, location: string, options?: AbstractDatabaseOptions<string, string>);
+    constructor(location: string, options?: AbstractDatabaseOptions<string, string>);
+    setStorage(storage: AsyncStorageStatic): void;
     protected _open(options: any, callback?: (err?: Error | null) => void): void;
     protected _close(callback?: (err?: Error | null) => void): void;
     protected _get(key: string, options: any, callback?: (err: Error | null, value?: ValueType) => void): void | Promise<ValueType>;

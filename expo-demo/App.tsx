@@ -1,14 +1,22 @@
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View } from 'react-native'
-import { RNAsyncStorageLevel } from '@pax-k/rn-async-storage-level'
+import { LevelFactory, RNAsyncStorageLevel } from '@pax-k/rn-async-storage-level'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
-// create a new db
-const db = new RNAsyncStorageLevel(AsyncStorage, 'test')
-const db_2 = new RNAsyncStorageLevel(AsyncStorage, 'test_2')
 
 async function withAsync() {
   try {
+    const db = LevelFactory.createAbstractLevel(RNAsyncStorageLevel, 'test_5')
+
+    if (db instanceof RNAsyncStorageLevel) {
+      db.setStorage(AsyncStorage)
+    }
+
+    const db_2 = LevelFactory.createAbstractLevel(RNAsyncStorageLevel, 'test_6')
+
+    if (db_2 instanceof RNAsyncStorageLevel) {
+      db_2.setStorage(AsyncStorage)
+    }
+
     // listen for 'put' events
     db.on('put', (key, value) => {
       console.log('event: put', key, value)
@@ -62,6 +70,18 @@ async function withAsync() {
 withAsync()
 
 function withCallbacks() {
+  const db = LevelFactory.createAbstractLevel(RNAsyncStorageLevel, 'test_5')
+
+  if (db instanceof RNAsyncStorageLevel) {
+    db.setStorage(AsyncStorage)
+  }
+
+  const db_2 = LevelFactory.createAbstractLevel(RNAsyncStorageLevel, 'test_6')
+
+  if (db_2 instanceof RNAsyncStorageLevel) {
+    db_2.setStorage(AsyncStorage)
+  }
+
   db.on('put', (key, value) => {
     console.log('event: put', key, value)
   })

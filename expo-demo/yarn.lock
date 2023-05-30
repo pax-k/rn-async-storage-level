@@ -2171,9 +2171,9 @@ __metadata:
   linkType: hard
 
 "@pax-k/rn-async-storage-level@file:./rn-async-storage-level::locator=expo-demo%40workspace%3A.":
-  version: 1.0.2
-  resolution: "@pax-k/rn-async-storage-level@file:./rn-async-storage-level#./rn-async-storage-level::hash=925e46&locator=expo-demo%40workspace%3A."
-  checksum: fd85d2580d79a7b769031cb106e68549b683b7e77b5d8b74020e4a6fda7f164ecb2f17a4fd8d978f9675f117a681899982d1e3448197b8f2303b4ac12069f2bd
+  version: 1.0.19
+  resolution: "@pax-k/rn-async-storage-level@file:./rn-async-storage-level#./rn-async-storage-level::hash=152f5d&locator=expo-demo%40workspace%3A."
+  checksum: bc7a260cc1bae4ea305f36a3186faeb16ccb217ff6eeebf11bb7f8167ecdcc23b651198669097019b193905c9e4b021e94ef4cfb0ad5102572c6b8808c24dafa
   languageName: node
   linkType: hard
 
